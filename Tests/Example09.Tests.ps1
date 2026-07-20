@@ -128,5 +128,23 @@ Describe Example09 {
 
             $DotContent | Should -Match $ExpectedText
         }
+        It 'Should match App-Server-01 -> Web-Server-Farm edge' {
+            $DotFile = ($RunFile).FullName
+            $DotContent = Get-Content -Path $DotFile -Raw
+            $ExpectedText = '"App-Server-01" -> "Web-Server-Farm"'
+
+            $DotContent | Should -Match $ExpectedText
+        }
+        It 'Should route the health-check edge onto the Web-Server-02 icon port' {
+            $DotFile = ($RunFile).FullName
+            $DotContent = Get-Content -Path $DotFile -Raw
+            # Note: Graphviz's dot.exe layout engine canonicalizes the headport="Icon_Web-Server-02"
+            # attribute set by -HeadPort into inline "Node":"port" syntax on the edge itself when it
+            # writes the laid-out graph back to DOT text (unlike Add-NodeEdge's raw, non-laid-out
+            # string output, which retains the headport="..." attribute form).
+            $ExpectedText = '"Web-Server-Farm":"Icon_Web-Server-02"'
+
+            $DotContent | Should -Match $ExpectedText
+        }
     }
 }
