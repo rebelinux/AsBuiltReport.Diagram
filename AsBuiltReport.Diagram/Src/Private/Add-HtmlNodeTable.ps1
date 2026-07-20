@@ -528,7 +528,7 @@ function Add-HtmlNodeTable {
                     $TDIconNumber = 0
                     foreach ($Element in $Group[$Number]) {
                         $TDIconMatch = if ($Icon.Count -eq 1) { $Icon } else { $iconGroup[$Number][$TDIconNumber] }
-                        $TDICON += '<TD bgcolor="#FFCCCC" ALIGN="{0}" colspan="1"><FONT FACE="{1}" Color="{2}" POINT-SIZE="{3}">{4}</FONT></TD>' -f $Align, $FontName, $FontColor, $FontSize, $TDIconMatch
+                        $TDICON += '<TD PORT="Icon_{0}" bgcolor="#FFCCCC" ALIGN="{1}" colspan="1"><FONT FACE="{2}" Color="{3}" POINT-SIZE="{4}">{5}</FONT></TD>' -f $Element, $Align, $FontName, $FontColor, $FontSize, $TDIconMatch
 
                         $TDIconNumber++
                     }
@@ -657,12 +657,12 @@ function Add-HtmlNodeTable {
                 while ($Number -ne $Group.Count) {
                     if ($Icon.Count -gt 1) {
                         foreach ($Element in $Group[$Number]) {
-                            $TDICON += '<TD ALIGN="{0}" colspan="1"{1}><img src="{2}"/></TD>' -f $Align, $IconSizeAttr, $Icon[$iconNumber]
+                            $TDICON += '<TD PORT="Icon_{0}" ALIGN="{1}" colspan="1"{2}><img src="{3}"/></TD>' -f $Element, $Align, $IconSizeAttr, $Icon[$iconNumber]
                             $iconNumber++
                         }
                     } else {
                         foreach ($Element in $Group[$Number]) {
-                            $TDICON += '<TD ALIGN="{0}" colspan="1"{1}><img src="{2}"/></TD>' -f $Align, $IconSizeAttr, $Icon
+                            $TDICON += '<TD PORT="Icon_{0}" ALIGN="{1}" colspan="1"{2}><img src="{3}"/></TD>' -f $Element, $Align, $IconSizeAttr, $Icon
                         }
                     }
                     $TR += '<TR>{0}</TR>' -f $TDICON
