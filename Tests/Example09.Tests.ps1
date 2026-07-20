@@ -20,7 +20,9 @@ Describe Example09 {
             Path = 'C:\logo.png'
             Format = @('dot')
         }
-        $RunFile = & $ProjectRoot\Examples\Example09.ps1 @PassParamsDot
+        $RunOutput = & $ProjectRoot\Examples\Example09.ps1 @PassParamsDot 2>&1
+        $RunFile = $RunOutput | Where-Object { $_ -is [System.IO.FileInfo] }
+        $RunWarnings = ($RunOutput | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] } | ForEach-Object { $_.ToString() }) -join "`n"
     }
 
     Context 'Format Parameter Tests' {
@@ -145,6 +147,9 @@ Describe Example09 {
             $ExpectedText = '"Web-Server-Farm":"Icon_Web-Server-02"'
 
             $DotContent | Should -Match $ExpectedText
+        }
+        It 'Should not warn that the Web-Server-02 icon port is unrecognized' {
+            $RunWarnings | Should -Not -Match 'port Icon_Web-Server-02 unrecognized'
         }
     }
 }
