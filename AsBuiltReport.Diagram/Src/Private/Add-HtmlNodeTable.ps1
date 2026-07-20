@@ -83,6 +83,8 @@ function Add-HtmlNodeTable {
 
     .PARAMETER MultiIcon
         Allow to draw an icon for each table element. If not set, the table shares a single icon.
+        Each element's icon cell gets its own PORT="Icon_{Element}" (in addition to the label cell's existing
+        PORT="{Element}"), so an edge can be routed onto the icon specifically via Add-NodeEdge's -HeadPort/-TailPort.
 
     .PARAMETER ImagesObj
         Hashtable with the IconName to IconPath translation.
