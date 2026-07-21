@@ -96,4 +96,10 @@ Describe Add-HtmlNodeTable {
     It 'Should Throw a Message' {
         { Add-HtmlNodeTable -Name 'Test' -inputObject $DCsArray -ImagesObj $Images -Align 'Center' -iconType 'DomainControlle' } | Should -Throw -ExpectedMessage 'Error: DomainControlle IconType not found in Images object'
     }
+    It 'Should render array-valued multi-key AditionalInfo content when a MultiIcon group has exactly 1 item' {
+        $HTMLSingleItemMultiKeyInfo = Add-HtmlNodeTable -Name 'Test' -ImagesObj $Images -inputObject @('Server-dc-01v') -iconType 'DomainController' -MultiIcon -AditionalInfo ([Ordered]@{ 'Address Space' = @('10.3.0.0/16'); 'Role' = @('Spoke') })
+        $HTMLSingleItemMultiKeyInfo | Should -Match 'Address Space: 10\.3\.0\.0/16'
+        $HTMLSingleItemMultiKeyInfo | Should -Match 'Role: Spoke'
+        $HTMLSingleItemMultiKeyInfo | Should -Not -Match 'System\.Object\[\]'
+    }
 }

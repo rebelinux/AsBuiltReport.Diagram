@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump module version v1.0.9
 - Update Graphviz binaries to v15.1.0
 
+### :wrench: Fixed
+
+- Fix `Add-HtmlNodeTable -MultiIcon` with multi-key `-AditionalInfo` rendering each array value as its .NET type name (e.g. `System.Object[]`) instead of its content when the group being rendered has exactly 1 item
+
 ## [1.0.8] - 2026-06-16
 
 ### :toolbox: Added
