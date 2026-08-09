@@ -36,6 +36,9 @@ function Add-AbrTopologyEdge {
         Tooltip text shown on hover.
     .PARAMETER LineStyle
         Line style override (Solid, Dashed, Dotted).
+    .PARAMETER Emphasis
+        Relative line prominence. Strong renders a more prominent connection; Subtle renders a
+        lower-emphasis relationship. ChartForgeX does not support an arbitrary numeric per-edge width.
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function')]
     [CmdletBinding()]
@@ -79,7 +82,10 @@ function Add-AbrTopologyEdge {
         [string] $Tooltip,
 
         [Parameter(Mandatory = $false, HelpMessage = 'Please provide the line style override (Solid, Dashed, Dotted)')]
-        [ChartForgeX.Topology.TopologyEdgeLineStyle] $LineStyle
+        [ChartForgeX.Topology.TopologyEdgeLineStyle] $LineStyle,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the relative line prominence (Normal, Subtle, Strong)')]
+        [ChartForgeX.Topology.TopologyEdgeEmphasis] $Emphasis
     )
 
     process {
@@ -98,6 +104,7 @@ function Add-AbrTopologyEdge {
             if ($Color) { $Params.Color = $Color }
             if ($Tooltip) { $Params.Tooltip = $Tooltip }
             if ($PSBoundParameters.ContainsKey('LineStyle')) { $Params.LineStyle = $LineStyle }
+            if ($PSBoundParameters.ContainsKey('Emphasis')) { $Params.Emphasis = $Emphasis }
 
             Add-TopologyEdge @Params
         } catch {

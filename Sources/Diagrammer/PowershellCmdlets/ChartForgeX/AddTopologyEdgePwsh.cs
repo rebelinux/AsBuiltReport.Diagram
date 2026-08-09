@@ -46,6 +46,9 @@ namespace AsBuiltReportDiagram.PowerShell.ChartForgeX
         [Parameter(HelpMessage = "Line style override (Solid, Dashed, Dotted).")]
         public TopologyEdgeLineStyle? LineStyle { get; set; }
 
+        [Parameter(HelpMessage = "Relative line prominence (Normal, Subtle, Strong).")]
+        public TopologyEdgeEmphasis? Emphasis { get; set; }
+
         protected override void ProcessRecord()
         {
             Chart = Chart.AddEdge(
@@ -55,6 +58,11 @@ namespace AsBuiltReportDiagram.PowerShell.ChartForgeX
             if (LineStyle.HasValue)
             {
                 Chart = Chart.WithEdgeLineStyle(Id, LineStyle.Value);
+            }
+
+            if (Emphasis.HasValue)
+            {
+                Chart = Chart.WithEdgeEmphasis(Id, Emphasis.Value);
             }
 
             WriteObject(Chart);

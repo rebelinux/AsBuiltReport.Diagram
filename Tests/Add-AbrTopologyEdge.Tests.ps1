@@ -27,4 +27,13 @@ Describe Add-AbrTopologyEdge {
     It 'Should set the edge Kind' {
         ($Diagram.Edges | Where-Object { $_.Id -eq 'WebApp' }).Kind | Should -Be ([ChartForgeX.Topology.TopologyEdgeKind]::DataFlow)
     }
+
+    It 'Should set the edge line emphasis' {
+        $EmphasizedDiagram = New-AbrTopologyDiagram -Id 'EmphasisTest'
+        $EmphasizedDiagram = $EmphasizedDiagram | Add-AbrTopologyNode -Id 'Source' -Label 'Source'
+        $EmphasizedDiagram = $EmphasizedDiagram | Add-AbrTopologyNode -Id 'Target' -Label 'Target'
+        $EmphasizedDiagram = $EmphasizedDiagram | Add-AbrTopologyEdge -Id 'StrongEdge' -SourceId 'Source' -TargetId 'Target' -Emphasis Strong
+
+        ($EmphasizedDiagram.Edges | Where-Object { $_.Id -eq 'StrongEdge' }).Emphasis | Should -Be ([ChartForgeX.Topology.TopologyEdgeEmphasis]::Strong)
+    }
 }
