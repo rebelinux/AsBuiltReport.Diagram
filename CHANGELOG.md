@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.9] - 2026-07-27
 
+### :toolbox: Added
+
+- Add a dedicated `PORT="Icon_{Element}"` port to each icon cell in `Add-HtmlNodeTable -MultiIcon` output (both normal and `-IconDebug` rendering), so edges can target the icon directly instead of only the label cell
+
 ### :arrows_clockwise: Changed
 
 - Bump module version v1.0.9
