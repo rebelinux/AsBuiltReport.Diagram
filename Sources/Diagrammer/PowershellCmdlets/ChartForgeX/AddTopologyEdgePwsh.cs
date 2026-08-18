@@ -49,6 +49,42 @@ namespace AsBuiltReportDiagram.PowerShell.ChartForgeX
         [Parameter(HelpMessage = "Relative line prominence (Normal, Subtle, Strong).")]
         public TopologyEdgeEmphasis? Emphasis { get; set; }
 
+        [Parameter(HelpMessage = "Named port ID on the source node.")]
+        public string? SourcePortId { get; set; }
+
+        [Parameter(HelpMessage = "Named port ID on the target node.")]
+        public string? TargetPortId { get; set; }
+
+        [Parameter(HelpMessage = "Explicit source endpoint marker (None, Arrow, Circle, Diamond).")]
+        public TopologyMarkerKind? SourceMarker { get; set; }
+
+        [Parameter(HelpMessage = "Explicit target endpoint marker (None, Arrow, Circle, Diamond).")]
+        public TopologyMarkerKind? TargetMarker { get; set; }
+
+        [Parameter(HelpMessage = "Edge-specific stroke width in pixels.")]
+        public double? StrokeWidth { get; set; }
+
+        [Parameter(HelpMessage = "Edge-specific opacity from zero to one.")]
+        public double? Opacity { get; set; }
+
+        [Parameter(HelpMessage = "Alternating dash and gap lengths in pixels.")]
+        public double[]? DashPattern { get; set; }
+
+        [Parameter(HelpMessage = "Label displayed near the source endpoint.")]
+        public string? SourceLabel { get; set; }
+
+        [Parameter(HelpMessage = "Label displayed near the target endpoint.")]
+        public string? TargetLabel { get; set; }
+
+        [Parameter(HelpMessage = "Preferred spring length for force-directed layouts.")]
+        public double? PreferredLength { get; set; }
+
+        [Parameter(HelpMessage = "Preferred minimum layer separation for layered layouts.")]
+        public int? MinimumRankSpan { get; set; }
+
+        [Parameter(HelpMessage = "Routing and rendering priority; higher values render above lower values.")]
+        public int? RoutingPriority { get; set; }
+
         protected override void ProcessRecord()
         {
             Chart = Chart.AddEdge(
@@ -63,6 +99,31 @@ namespace AsBuiltReportDiagram.PowerShell.ChartForgeX
             if (Emphasis.HasValue)
             {
                 Chart = Chart.WithEdgeEmphasis(Id, Emphasis.Value);
+            }
+
+            if (!string.IsNullOrEmpty(SourcePortId) || !string.IsNullOrEmpty(TargetPortId))
+            {
+                Chart = Chart.WithEdgeNamedPorts(Id, SourcePortId ?? string.Empty, TargetPortId ?? string.Empty);
+            }
+
+            if (SourceMarker.HasValue || TargetMarker.HasValue)
+            {
+                Chart = Chart.WithEdgeMarkers(Id, SourceMarker, TargetMarker);
+            }
+
+            if (StrokeWidth.HasValue || Opacity.HasValue || DashPattern is not null)
+            {
+                Chart = Chart.WithEdgeStroke(Id, StrokeWidth, Opacity, DashPattern ?? []);
+            }
+
+            if (!string.IsNullOrEmpty(SourceLabel) || !string.IsNullOrEmpty(TargetLabel))
+            {
+                Chart = Chart.WithEdgeEndpointLabels(Id, SourceLabel ?? string.Empty, TargetLabel ?? string.Empty);
+            }
+
+            if (PreferredLength.HasValue || MinimumRankSpan.HasValue || RoutingPriority.HasValue)
+            {
+                Chart = Chart.WithEdgeLayoutHints(Id, PreferredLength, MinimumRankSpan ?? 0, RoutingPriority ?? 0);
             }
 
             WriteObject(Chart);

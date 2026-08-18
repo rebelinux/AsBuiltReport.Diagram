@@ -38,7 +38,17 @@ function Add-AbrTopologyEdge {
         Line style override (Solid, Dashed, Dotted).
     .PARAMETER Emphasis
         Relative line prominence. Strong renders a more prominent connection; Subtle renders a
-        lower-emphasis relationship. ChartForgeX does not support an arbitrary numeric per-edge width.
+        lower-emphasis relationship.
+    .PARAMETER StrokeWidth
+        Edge-specific stroke width in pixels.
+    .PARAMETER DashPattern
+        Alternating dash and gap lengths in pixels.
+    .PARAMETER SourcePortId
+        Named source-node port created with Add-TopologyNodePort.
+    .PARAMETER TargetPortId
+        Named target-node port created with Add-TopologyNodePort.
+    .PARAMETER PreferredLength
+        Soft force-directed layout length hint, not an exact rendered edge length.
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function')]
     [CmdletBinding()]
@@ -85,7 +95,44 @@ function Add-AbrTopologyEdge {
         [ChartForgeX.Topology.TopologyEdgeLineStyle] $LineStyle,
 
         [Parameter(Mandatory = $false, HelpMessage = 'Please provide the relative line prominence (Normal, Subtle, Strong)')]
-        [ChartForgeX.Topology.TopologyEdgeEmphasis] $Emphasis
+        [ChartForgeX.Topology.TopologyEdgeEmphasis] $Emphasis,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the named source-node port')]
+        [string] $SourcePortId,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the named target-node port')]
+        [string] $TargetPortId,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the source endpoint marker (None, Arrow, Circle, Diamond)')]
+        [ChartForgeX.Topology.TopologyMarkerKind] $SourceMarker,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the target endpoint marker (None, Arrow, Circle, Diamond)')]
+        [ChartForgeX.Topology.TopologyMarkerKind] $TargetMarker,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the edge-specific stroke width in pixels')]
+        [double] $StrokeWidth,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the edge-specific opacity from zero to one')]
+        [ValidateRange(0.0, 1.0)]
+        [double] $Opacity,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide alternating dash and gap lengths in pixels')]
+        [double[]] $DashPattern,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the label near the source endpoint')]
+        [string] $SourceLabel,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the label near the target endpoint')]
+        [string] $TargetLabel,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the preferred spring length for force-directed layouts')]
+        [double] $PreferredLength,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the preferred minimum layer separation for layered layouts')]
+        [int] $MinimumRankSpan,
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the routing and rendering priority')]
+        [int] $RoutingPriority
     )
 
     process {
@@ -105,6 +152,11 @@ function Add-AbrTopologyEdge {
             if ($Tooltip) { $Params.Tooltip = $Tooltip }
             if ($PSBoundParameters.ContainsKey('LineStyle')) { $Params.LineStyle = $LineStyle }
             if ($PSBoundParameters.ContainsKey('Emphasis')) { $Params.Emphasis = $Emphasis }
+            foreach ($Name in @('SourcePortId', 'TargetPortId', 'SourceMarker', 'TargetMarker', 'StrokeWidth', 'Opacity', 'DashPattern', 'SourceLabel', 'TargetLabel', 'PreferredLength', 'MinimumRankSpan', 'RoutingPriority')) {
+                if ($PSBoundParameters.ContainsKey($Name)) {
+                    $Params[$Name] = $PSBoundParameters[$Name]
+                }
+            }
 
             Add-TopologyEdge @Params
         } catch {

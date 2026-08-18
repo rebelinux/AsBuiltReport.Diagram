@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Management.Automation;
 using ChartForgeX.Topology;
 
@@ -37,7 +38,7 @@ namespace AsBuiltReportDiagram.PowerShell.ChartForgeX
         [Parameter(HelpMessage = "Layered flow direction.")]
         public TopologyLayoutDirection LayoutDirection { get; set; }
 
-        [Parameter(HelpMessage = "Default descendant layout policy.")]
+        [Parameter(HelpMessage = "Default layout policy inherited by hierarchy items that do not define one.")]
         public TopologyHierarchyLayoutPolicy LayoutPolicy { get; set; }
 
         [Parameter(HelpMessage = "Default generated node display mode.")]
@@ -60,6 +61,12 @@ namespace AsBuiltReportDiagram.PowerShell.ChartForgeX
 
         [Parameter(HelpMessage = "Generated hierarchy edge routing.")]
         public TopologyEdgeRouting EdgeRouting { get; set; }
+
+        [Parameter(HelpMessage = "Preferred length of generated hierarchy edges for layout calculations.")]
+        public double? EdgeLength { get; set; }
+
+        [Parameter(HelpMessage = "Stroke width in pixels for generated hierarchy edges.")]
+        public double? EdgeWidth { get; set; }
 
         [Parameter(HelpMessage = "Generated hierarchy edge ID prefix.")]
         public string? EdgeIdPrefix { get; set; }
@@ -89,7 +96,28 @@ namespace AsBuiltReportDiagram.PowerShell.ChartForgeX
                 hierarchyItems.Add(CreateItem(item));
             }
 
+            var existingEdgeIds = Chart.Edges
+                .Select(edge => edge.Id)
+                .ToHashSet(StringComparer.Ordinal);
+
             Chart = Chart.AddHierarchy(hierarchyItems, options);
+
+            if (EdgeLength.HasValue || EdgeWidth.HasValue)
+            {
+                foreach (var edge in Chart.Edges.Where(edge => !existingEdgeIds.Contains(edge.Id)))
+                {
+                    if (EdgeLength.HasValue)
+                    {
+                        Chart = Chart.WithEdgeLayoutHints(edge.Id, EdgeLength, 1, 0);
+                    }
+
+                    if (EdgeWidth.HasValue)
+                    {
+                        Chart = Chart.WithEdgeStroke(edge.Id, EdgeWidth, null, []);
+                    }
+                }
+            }
+
             WriteObject(Chart);
         }
 

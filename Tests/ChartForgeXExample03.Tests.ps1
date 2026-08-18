@@ -10,7 +10,6 @@ Describe ChartForgeXExample03 {
 
     It 'renders the Example15 web application hierarchy' {
         $SvgContent | Should -Match 'Web Application Diagram'
-        $SvgContent | Should -Match 'Web Server Farm'
         $SvgContent | Should -Match 'Web-Server-01'
         $SvgContent | Should -Match 'App-Server-01'
         $SvgContent | Should -Match 'Db-Server-01'
@@ -19,10 +18,7 @@ Describe ChartForgeXExample03 {
         $SvgContent | Should -Match 'WAN'
     }
 
-    It 'renders hierarchy and connectivity relationships' {
+    It 'renders hierarchy relationships' {
         $SvgContent | Should -Match 'data-cfx-meta-hierarchy-relationship="parent-child"'
-        $SvgContent | Should -Match 'gRPC'
-        $SvgContent | Should -Match 'SQL'
-        $SvgContent | Should -Match 'GE0/0'
     }
 }

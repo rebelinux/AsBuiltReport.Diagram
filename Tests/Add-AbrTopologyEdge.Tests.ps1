@@ -36,4 +36,29 @@ Describe Add-AbrTopologyEdge {
 
         ($EmphasizedDiagram.Edges | Where-Object { $_.Id -eq 'StrongEdge' }).Emphasis | Should -Be ([ChartForgeX.Topology.TopologyEdgeEmphasis]::Strong)
     }
+
+    It 'Should set edge endpoint, stroke, and layout features' {
+        $FeatureDiagram = New-AbrTopologyDiagram -Id 'EdgeFeatureTest'
+        $FeatureDiagram = $FeatureDiagram | Add-AbrTopologyNode -Id 'Source' -Label 'Source'
+        $FeatureDiagram = $FeatureDiagram | Add-AbrTopologyNode -Id 'Target' -Label 'Target'
+        $FeatureDiagram = $FeatureDiagram | Add-AbrTopologyNodePort -NodeId 'Source' -Id 'eth0' -Side Right
+        $FeatureDiagram = $FeatureDiagram | Add-AbrTopologyNodePort -NodeId 'Target' -Id 'eth1' -Side Left
+        $FeatureDiagram = $FeatureDiagram | Add-AbrTopologyEdge -Id 'FeatureEdge' -SourceId 'Source' -TargetId 'Target' `
+            -SourcePortId 'eth0' -TargetPortId 'eth1' -SourceMarker Circle -TargetMarker Diamond -StrokeWidth 3 -Opacity 0.5 -DashPattern @(8, 4) `
+            -SourceLabel 'eth0' -TargetLabel 'eth1' -PreferredLength 240 -MinimumRankSpan 2 -RoutingPriority 5
+
+        $Edge = $FeatureDiagram.Edges | Where-Object { $_.Id -eq 'FeatureEdge' }
+        $Edge.SourcePortId | Should -BeExactly 'eth0'
+        $Edge.TargetPortId | Should -BeExactly 'eth1'
+        $Edge.SourceMarker | Should -Be ([ChartForgeX.Topology.TopologyMarkerKind]::Circle)
+        $Edge.TargetMarker | Should -Be ([ChartForgeX.Topology.TopologyMarkerKind]::Diamond)
+        $Edge.StrokeWidth | Should -Be 3
+        $Edge.Opacity | Should -Be 0.5
+        $Edge.DashPattern | Should -Be @(8, 4)
+        $Edge.SourceLabel | Should -BeExactly 'eth0'
+        $Edge.TargetLabel | Should -BeExactly 'eth1'
+        $Edge.PreferredLength | Should -Be 240
+        $Edge.MinimumRankSpan | Should -Be 2
+        $Edge.RoutingPriority | Should -Be 5
+    }
 }

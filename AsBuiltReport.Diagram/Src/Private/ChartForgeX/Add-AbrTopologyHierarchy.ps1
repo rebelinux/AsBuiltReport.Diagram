@@ -14,11 +14,13 @@ function Add-AbrTopologyHierarchy {
     .PARAMETER Item
         Hierarchy items as hashtables, PSCustomObjects, or TopologyHierarchyItem objects. Id and Label
         are required. ParentId, Level, Kind, Status, Subtitle, Symbol, IconId, GroupId, Color,
-        BackgroundColor, Width, Height, LayoutPolicy, and Metadata are supported.
+        BackgroundColor, Width, Height, LayoutPolicy, and Metadata are supported. EdgeLength and
+        EdgeWidth configure the generated parent-child edges.
     .PARAMETER LayoutPolicy
-        Default policy for arranging each item's direct descendants. Auto uses a sibling band when it
-        fits, Compact when it does not; Standard keeps one band; Compact uses a balanced grid; Vertical
-        stacks children in a column.
+        Default policy inherited by hierarchy items without their own LayoutPolicy. An item's explicit
+        LayoutPolicy applies to its descendant subtree until a child overrides it. Auto uses a sibling
+        band when it fits, Compact when it does not; Standard keeps one band; Compact uses a balanced
+        grid; Vertical stacks children in a column.
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function')]
     [CmdletBinding()]
@@ -59,6 +61,10 @@ function Add-AbrTopologyHierarchy {
         [ChartForgeX.Primitives.VisualLinkDirection] $EdgeDirection,
 
         [ChartForgeX.Topology.TopologyEdgeRouting] $EdgeRouting,
+
+        [double] $EdgeLength,
+
+        [double] $EdgeWidth,
 
         [string] $EdgeIdPrefix
     )
