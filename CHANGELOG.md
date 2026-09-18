@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add ChartForgeX topology edge controls for named ports, endpoint markers and labels, custom stroke styling, and layout hints.
 
-## [1.0.12] - Unreleased
+## [1.0.12] - 2026-09-18
 
 ### :arrows_clockwise: Changed
 
