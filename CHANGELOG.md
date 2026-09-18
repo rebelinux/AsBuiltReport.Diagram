@@ -7,13 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.0] - Unreleased
 
-### :arrows_clockwise: Changed
-
-- Update ChartForgeX to v1.7.0. Topology hierarchy layout policies now inherit through each subtree until overridden.
-
 ### :toolbox: Added
 
 - Add ChartForgeX topology edge controls for named ports, endpoint markers and labels, custom stroke styling, and layout hints.
+
+### :arrows_clockwise: Changed
+
+- Update ChartForgeX to v1.7.0. Topology hierarchy layout policies now inherit through each subtree until overridden.
 
 ## [1.0.12] - 2026-09-18
 
