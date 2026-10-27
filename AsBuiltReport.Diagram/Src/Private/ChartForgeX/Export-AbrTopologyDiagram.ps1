@@ -21,6 +21,9 @@ function Export-AbrTopologyDiagram {
         Output file name, without extension.
     .PARAMETER Format
         Output format. Supported formats are svg, png, html, bmp, gif, tiff, ppm, apng, and base64.
+    .PARAMETER TextMeasurementMode
+        Text-width policy. InstalledFonts uses locally installed fonts for more accurate layout;
+        PortableEstimate preserves host-independent geometry.
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function')]
     [CmdletBinding()]
@@ -47,7 +50,10 @@ function Export-AbrTopologyDiagram {
 
         [Parameter(Mandatory = $false, HelpMessage = 'Please provide the output format (svg, png, html, bmp, gif, tiff, ppm, apng, base64)')]
         [ValidateSet('svg', 'png', 'html', 'bmp', 'gif', 'tiff', 'ppm', 'apng', 'base64')]
-        [Array] $Format = @('svg')
+        [Array] $Format = @('svg'),
+
+        [Parameter(Mandatory = $false, HelpMessage = 'Please provide the text measurement policy')]
+        [ChartForgeX.Typography.TextMeasurementMode] $TextMeasurementMode
     )
 
     process {
@@ -58,11 +64,25 @@ function Export-AbrTopologyDiagram {
             $SelectedFormat = @($Format)[0]
 
             if ($SelectedFormat -eq 'base64') {
-                $TempFile = Export-TopologyChart -Chart $Diagram -OutputFolderPath $OutputFolderPath -Filename "$($Filename)_temp" -Format 'png'
+                $ExportParams = @{
+                    Chart            = $Diagram
+                    OutputFolderPath = $OutputFolderPath
+                    Filename         = "$($Filename)_temp"
+                    Format           = 'png'
+                }
+                if ($PSBoundParameters.ContainsKey('TextMeasurementMode')) { $ExportParams.TextMeasurementMode = $TextMeasurementMode }
+                $TempFile = Export-TopologyChart @ExportParams
                 return ConvertTo-Base64 -ImageInput $TempFile.FullName -Delete $true
             }
 
-            Export-TopologyChart -Chart $Diagram -OutputFolderPath $OutputFolderPath -Filename $Filename -Format $SelectedFormat
+            $ExportParams = @{
+                Chart            = $Diagram
+                OutputFolderPath = $OutputFolderPath
+                Filename         = $Filename
+                Format           = $SelectedFormat
+            }
+            if ($PSBoundParameters.ContainsKey('TextMeasurementMode')) { $ExportParams.TextMeasurementMode = $TextMeasurementMode }
+            Export-TopologyChart @ExportParams
         } catch {
             Write-Error "Failed to export ChartForgeX topology diagram: $($_.Exception.Message)"
         }

@@ -26,6 +26,11 @@ Describe Export-AbrTopologyDiagram {
             $Result.FullName | Should -Exist
         }
 
+        It 'Should support installed-font text measurement' {
+            $Result = $Diagram | Export-AbrTopologyDiagram -OutputFolderPath $TestDrive -Filename 'UnitTestMeasuredTypography' -Format 'svg' -TextMeasurementMode InstalledFonts
+            $Result.FullName | Should -Exist
+        }
+
         It 'Should return a base64 string' {
             $Result = $Diagram | Export-AbrTopologyDiagram -OutputFolderPath $TestDrive -Filename 'UnitTestBase64' -Format 'base64'
             Test-AbrBase64 -String $Result | Should -BeTrue

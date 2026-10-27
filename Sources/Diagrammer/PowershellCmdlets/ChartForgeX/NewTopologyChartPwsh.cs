@@ -1,5 +1,6 @@
 using System.Management.Automation;
 using ChartForgeX.Topology;
+using ChartForgeX.Themes;
 
 namespace AsBuiltReportDiagram.PowerShell.ChartForgeX
 {
@@ -47,8 +48,8 @@ namespace AsBuiltReportDiagram.PowerShell.ChartForgeX
 
             if (!string.IsNullOrEmpty(Theme))
             {
-                var theme = Theme.Equals("Dark", System.StringComparison.OrdinalIgnoreCase) ? TopologyTheme.Dark() : TopologyTheme.Light();
-                chart = chart.WithTheme(theme);
+                var theme = VisualThemeMode.Equals("Dark", System.StringComparison.OrdinalIgnoreCase) ? VisualThemeMode.Dark : VisualThemeMode.Light;
+                chart = chart.WithThemeMode(theme);
             }
 
             WriteObject(chart);

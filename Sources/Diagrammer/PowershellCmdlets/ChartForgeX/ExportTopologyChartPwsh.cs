@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Management.Automation;
 using ChartForgeX.Topology;
+using ChartForgeX.Typography;
 
 namespace AsBuiltReportDiagram.PowerShell.ChartForgeX
 {
@@ -22,39 +23,42 @@ namespace AsBuiltReportDiagram.PowerShell.ChartForgeX
         public string Filename { get; set; } = string.Empty;
 
         [Parameter(HelpMessage = "Output format.")]
-        [ValidateSet("svg", "png", "html", "bmp", "gif", "tiff", "ppm", "apng")]
+        [ValidateSet("svg", "png", "html", "bmp", "tiff", "ppm", "apng")]
         public string Format { get; set; } = "svg";
+
+        [Parameter(HelpMessage = "Text measurement policy. InstalledFonts uses fonts on the rendering host; PortableEstimate is host-independent.")]
+        public TextMeasurementMode? TextMeasurementMode { get; set; }
 
         protected override void ProcessRecord()
         {
             var extension = Format.ToLowerInvariant();
             var path = Path.Combine(OutputFolderPath, $"{Filename}.{extension}");
+            var options = TextMeasurementMode.HasValue
+                ? new TopologyRenderOptions { TextMeasurementMode = TextMeasurementMode.Value }
+                : null;
 
             switch (extension)
             {
                 case "svg":
-                    Chart.SaveSvg(path);
+                    Chart.SaveSvg(path, options);
                     break;
                 case "png":
-                    Chart.SavePng(path);
+                    Chart.SavePng(path, options);
                     break;
                 case "html":
-                    Chart.SaveHtml(path);
+                    Chart.SaveHtml(path, options);
                     break;
                 case "bmp":
-                    Chart.SaveBmp(path);
-                    break;
-                case "gif":
-                    Chart.SaveGif(path);
+                    Chart.SaveBmp(path, options);
                     break;
                 case "tiff":
-                    Chart.SaveTiff(path);
+                    Chart.SaveTiff(path, options);
                     break;
                 case "ppm":
-                    Chart.SavePpm(path);
+                    Chart.SavePpm(path, options);
                     break;
                 case "apng":
-                    Chart.SaveApng(path);
+                    Chart.SavePng(path, options);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(Format), Format, "Unsupported ChartForgeX export format.");
