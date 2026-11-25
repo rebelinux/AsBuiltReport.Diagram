@@ -80,16 +80,6 @@ jobs:
                   $OutputFormatParam = @{ OutputFormat = 'NUnitXml' }
 
                   .\Tests\Invoke-Tests.ps1 @CodeCoverageParam @OutputFormatParam
-              if: matrix.os == 'windows-latest' && matrix.shell == 'pwsh'
-
-            - name: Run Pester Tests Windows PowerShell
-              run: |
-                  $CodeCoverageParam = @{}
-                  $OutputFormatParam = @{ OutputFormat = 'NUnitXml' }
-
-                  .\Tests\Invoke-Tests.ps1 @CodeCoverageParam @OutputFormatParam
-              if: matrix.os == 'windows-latest' && matrix.shell == 'powershell'
-
 
             - name: Upload test results
               if: always()
