@@ -30,7 +30,7 @@ Write-Host "Graphviz Path: $GraphvizPath" -ForegroundColor Cyan
 
 switch ($PSVersionTable.PSEdition) {
     'Core' {
-        $Script:CoreAssemblyPath = "$ProjectRoot{0}AsBuiltReport.Diagram{0}Src{0}Bin{0}Assemblies{0}net80{0}AbrDiagrammer.dll" -f [System.IO.Path]::DirectorySeparatorChar
+        $Script:CoreAssemblyPath = "$ProjectRoot{0}AsBuiltReport.Diagram{0}Src{0}Bin{0}Assemblies{0}netcore{0}AbrDiagrammer.dll" -f [System.IO.Path]::DirectorySeparatorChar
         if (-not (Test-Path -Path $Script:CoreAssemblyPath)) {
             throw "Required assembly not found: '$Script:CoreAssemblyPath'. Please build the project before running tests (e.g. 'dotnet build' in the Src directory)."
         }

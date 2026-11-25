@@ -1,7 +1,7 @@
 # Get assemblies files and import them
 switch ($PSVersionTable.PSEdition) {
     'Core' {
-        $assemblyPath = "$PSScriptRoot{0}Src{0}Bin{0}Assemblies{0}net80{0}AbrDiagrammer.dll" -f [System.IO.Path]::DirectorySeparatorChar
+        $assemblyPath = "$PSScriptRoot{0}Src{0}Bin{0}Assemblies{0}netcore{0}AbrDiagrammer.dll" -f [System.IO.Path]::DirectorySeparatorChar
         if (-not (Test-Path -Path $assemblyPath)) {
             throw "Required assembly not found: '$assemblyPath'. Please run the build/publish step (e.g., 'dotnet publish') before importing this module."
         }

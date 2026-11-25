@@ -10,10 +10,10 @@ A **PowerShell module** (`AsBuiltReport.Diagram`) that provides a framework for 
 
 The .NET assembly **must be built and copied before the PowerShell module can be imported or tests can run**.
 
-**PowerShell 7 / pwsh (net8.0):**
+**PowerShell 7 / pwsh (net10.0):**
 ```powershell
 dotnet publish ./Sources/Diagrammer -c Release
-Copy-Item -Path ./Sources/Diagrammer/bin/Release/net8.0/publish/* -Destination ./AsBuiltReport.Diagram/Src/Bin/Assemblies/net80 -Recurse
+Copy-Item -Path ./Sources/Diagrammer/bin/Release/net10.0/publish/* -Destination ./AsBuiltReport.Diagram/Src/Bin/Assemblies/netcore -Recurse
 ```
 
 **Windows PowerShell 5.1 (net48):**
@@ -68,22 +68,22 @@ AsBuiltReport.Diagram/       # PowerShell module root
     Public/                  # Only New-AbrDiagram.ps1 (the main diagram orchestrator)
     Private/                 # All other functions (Add-*, Export-*, Convert-*, Format-*, etc.)
     Bin/Assemblies/
-      net80/                 # Built output of Sources/Diagrammer (PS Core)
+      netcore/               # Built output of Sources/Diagrammer (PS Core)
       net48/                 # Built output of Sources/DiaConvertImageToPDF (Windows PS)
 Sources/
-  Diagrammer/                # .NET 8 C# project – PS Cmdlets for image ops (watermark, resize, rotate, PDF)
+  Diagrammer/                # .NET 10 C# project – PS Cmdlets for image ops (watermark, resize, rotate, PDF)
   DiaConvertImageToPDF/      # .NET Framework 4.8 C# project – Windows PS PDF conversion only
 Tests/                       # Pester test suite (one file per function + example tests)
 Examples/                    # Runnable PS1 scripts demonstrating each cmdlet
 ```
 
-**Module loading** (`AsBuiltReport.Diagram.psm1`): loads the assembly for the current PS edition (`net80` for Core, `net48` for Desktop), then dot-sources every `.ps1` in `Src/Private` and `Src/Public`. **Both** directories are exported.
+**Module loading** (`AsBuiltReport.Diagram.psm1`): loads the assembly for the current PS edition (`net10.0` for Core, `net48` for Desktop), then dot-sources every `.ps1` in `Src/Private` and `Src/Public`. **Both** directories are exported.
 
 **Function flow**: Callers build a PSGraph object using PSGraph cmdlets (`graph`, `node`, `edge`, `subgraph`), then pass it to `New-AbrDiagram` (or `Export-AbrDiagram` directly). `New-AbrDiagram` adds diagram-level labeling (logo, title, signature), then calls `Export-AbrDiagram` to render output via `dot.exe` / `ConvertTo-*` helpers.
 
 **Graphviz path resolution**: On Unix, the module probes `/usr/bin/dot`, `/bin/dot`, `/usr/local/bin/dot`, `/opt/homebrew/bin/dot`. On Windows, it uses `Tools\Graphviz\bin\dot.exe` relative to the module root.
 
-**C# assembly internals**: `AbrDiagrammer.dll` (net80) uses **SixLabors.ImageSharp** (v3.x) for image processing and **iText** (v9.x) for PDF generation. Cmdlet classes follow the naming pattern `{Verb}{Noun}Command` (e.g., `AddWatermarkToImageCommand`, `GetResizeImageFromFileCommand`).
+**C# assembly internals**: `AbrDiagrammer.dll` (net10.0) uses **SixLabors.ImageSharp** (v3.x) for image processing and **iText** (v9.x) for PDF generation. Cmdlet classes follow the naming pattern `{Verb}{Noun}Command` (e.g., `AddWatermarkToImageCommand`, `GetResizeImageFromFileCommand`).
 
 ---
 

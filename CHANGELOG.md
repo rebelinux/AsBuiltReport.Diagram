@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump module version v1.0.14
 - Update the default AsBuiltReport logo (`AsBuiltReport.png`) used for the diagram main logo and signature to the new AsBuiltReport branding
 - Update Graphviz binaries to v16.1.2
+- Update .Net dependencies to latest versions
 
 ## [1.0.13] - 2026-11-10
 

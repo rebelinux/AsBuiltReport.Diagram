@@ -1,16 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <!-- <OutputType>Exe</OutputType> -->
     <LangVersion>8.0</LangVersion>
     <TargetFramework>net48</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
-    <Version>1.0.13</Version>
+    <Version>1.0.14</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="itext" Version="9.8.0" />
-    <PackageReference Include="itext.bouncy-castle-adapter" Version="9.8.0" />
+    <PackageReference Include="itext" Version="9.8.1.1" />
+    <PackageReference Include="itext.bouncy-castle-adapter" Version="9.8.1.1" />
     <PackageReference Include="PowerShellStandard.Library" Version="5.1.1" />
   </ItemGroup>
 
